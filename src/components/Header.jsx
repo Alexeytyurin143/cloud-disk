@@ -3,14 +3,12 @@ import Button from '@mui/material/Button'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
-import { useTheme } from '@mui/material/styles'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ColorToggler } from './ColorToggler'
 import { useDispatch, useSelector } from 'react-redux'
 import { logOut } from '../store/userSlice'
 
 export const Header = () => {
-	const theme = useTheme()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const isAuth = useSelector((state) => state.user.isAuth)
@@ -40,9 +38,6 @@ export const Header = () => {
 							sx={{
 								my: 1,
 								mx: 1.5,
-								[theme.breakpoints.down('sm')]: {
-									display: 'none',
-								},
 							}}
 						>
 							Выйти
@@ -57,8 +52,9 @@ export const Header = () => {
 							sx={{
 								my: 1,
 								mx: 1.5,
-								[theme.breakpoints.down('sm')]: {
-									display: 'none',
+								display: {
+									xs: 'none',
+									sm: 'block',
 								},
 							}}
 						>
@@ -71,8 +67,9 @@ export const Header = () => {
 							sx={{
 								my: 1,
 								mx: 1.5,
-								[theme.breakpoints.down('sm')]: {
-									display: 'none',
+								display: {
+									xs: 'none',
+									sm: 'block',
 								},
 							}}
 						>

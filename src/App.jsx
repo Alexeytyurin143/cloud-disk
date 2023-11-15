@@ -1,6 +1,7 @@
 import CssBaseline from '@mui/material/CssBaseline'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { orange, deepOrange } from '@mui/material/colors'
 import { SignUp } from './components/SignUp'
 import { SignIn } from './components/SignIn'
 import { Layout } from './components/Layout'
@@ -14,10 +15,10 @@ const darkTheme = createTheme({
 	palette: {
 		mode: 'dark',
 		primary: {
-			main: '#ff9100',
+			main: orange[500],
 		},
 		secondary: {
-			main: '#a1887f',
+			main: deepOrange['A200'],
 		},
 	},
 })
@@ -26,10 +27,10 @@ const lightTheme = createTheme({
 	palette: {
 		mode: 'light',
 		primary: {
-			main: '#ff9f20',
+			main: orange[800],
 		},
 		secondary: {
-			main: '#cdbab3',
+			main: deepOrange['A400'],
 		},
 	},
 })

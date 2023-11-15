@@ -8,7 +8,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
-import { useTheme } from '@mui/material/styles'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLoginMutation } from '../api/user'
@@ -16,7 +15,6 @@ import { setUser } from '../store/userSlice'
 import { useEffect } from 'react'
 
 export const SignIn = () => {
-	const theme = useTheme()
 	const isAuth = useSelector((state) => state.user.isAuth)
 	const location = useLocation()
 	const navigate = useNavigate()
@@ -25,7 +23,6 @@ export const SignIn = () => {
 	const [login] = useLoginMutation()
 
 	const fromPage = location.state?.from?.pathname || '/'
-	console.log(fromPage)
 
 	const onSubmit = async (formData) => {
 		try {
@@ -105,8 +102,9 @@ export const SignIn = () => {
 								to='/registration'
 								variant='body2'
 								sx={{
-									[theme.breakpoints.up('sm')]: {
-										display: 'none',
+									display: {
+										xs: 'block',
+										sm: 'none',
 									},
 								}}
 							>

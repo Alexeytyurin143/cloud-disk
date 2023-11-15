@@ -9,13 +9,11 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { useTheme } from '@mui/material/styles'
 import { useRegistrationMutation } from '../api/user'
 import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
 
 export const SignUp = () => {
-	const theme = useTheme()
 	const navigate = useNavigate()
 	const isAuth = useSelector((state) => state.user.isAuth)
 	const { register, handleSubmit } = useForm()
@@ -95,8 +93,9 @@ export const SignUp = () => {
 								to='/login'
 								variant='body2'
 								sx={{
-									[theme.breakpoints.up('sm')]: {
-										display: 'none',
+									display: {
+										xs: 'block',
+										sm: 'none',
 									},
 								}}
 							>
