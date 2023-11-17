@@ -21,6 +21,16 @@ const darkTheme = createTheme({
 			main: deepOrange['A200'],
 		},
 	},
+	components: {
+		MuiButton: {
+			styleOverrides: {
+				text: () => ({
+					padding: '8px',
+					lineHeight: 'normal',
+				}),
+			},
+		},
+	},
 })
 
 const lightTheme = createTheme({
