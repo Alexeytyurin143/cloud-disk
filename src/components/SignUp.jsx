@@ -7,7 +7,7 @@ import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-import { Link as RouterLink, useNavigate } from 'react-router-dom'
+import { Navigate, Link as RouterLink, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useRegistrationMutation } from '../api/user'
 import { useSelector } from 'react-redux'
@@ -29,11 +29,9 @@ export const SignUp = () => {
 		}
 	}
 
-	useEffect(() => {
-		if (isAuth) {
-			navigate(-1)
-		}
-	}, [])
+	if (isAuth) {
+		return <Navigate to='/' />
+	}
 
 	return (
 		<Container component='main' maxWidth='xs'>

@@ -4,6 +4,13 @@ export const userApi = createApi({
 	reducerPath: 'userApi',
 	baseQuery: fetchBaseQuery({
 		baseUrl: 'http://localhost:3000',
+		prepareHeaders: (headers) => {
+			headers.set(
+				'Authorization',
+				`Bearer ${localStorage.getItem('token')}`
+			)
+			return headers
+		},
 	}),
 	endpoints: (builder) => ({
 		login: builder.mutation({
@@ -20,7 +27,11 @@ export const userApi = createApi({
 				body,
 			}),
 		}),
+		auth: builder.query({
+			query: () => '/api/auth/auth',
+		}),
 	}),
 })
 
-export const { useRegistrationMutation, useLoginMutation } = userApi
+export const { useRegistrationMutation, useLoginMutation, useAuthQuery } =
+	userApi

@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ColorToggler } from './ColorToggler'
 import { useDispatch, useSelector } from 'react-redux'
 import { logOut } from '../store/userSlice'
+import { filesApi } from '../api/files'
 
 export const Header = () => {
 	const navigate = useNavigate()
@@ -14,6 +15,7 @@ export const Header = () => {
 	const isAuth = useSelector((state) => state.user.isAuth)
 
 	const logOutHandler = () => {
+		dispatch(filesApi.util.resetApiState())
 		dispatch(logOut())
 		navigate('/login', { replace: true })
 	}

@@ -7,7 +7,12 @@ import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
+import {
+	Navigate,
+	Link as RouterLink,
+	useLocation,
+	useNavigate,
+} from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLoginMutation } from '../api/user'
@@ -27,19 +32,16 @@ export const SignIn = () => {
 	const onSubmit = async (formData) => {
 		try {
 			const payload = await login(formData).unwrap()
-			dispatch(setUser(payload.user))
-			localStorage.setItem('token', payload.token)
+			dispatch(setUser(payload))
 			navigate(fromPage, { replace: true })
 		} catch (error) {
 			alert(error.data.message)
 		}
 	}
 
-	useEffect(() => {
-		if (isAuth) {
-			navigate(-1)
-		}
-	}, [])
+	if (isAuth) {
+		return <Navigate to={fromPage} />
+	}
 
 	return (
 		<Container component='main' maxWidth='xs'>

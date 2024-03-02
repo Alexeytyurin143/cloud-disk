@@ -1,45 +1,52 @@
-import { useGetFilesQuery } from '../api/files'
-import { useDispatch, useSelector } from 'react-redux'
 import { FileList } from './FileList/FileList'
-import { useEffect } from 'react'
 import Button from '@mui/material/Button'
-import CircularProgress from '@mui/material/CircularProgress'
-import Typography from '@mui/material/Typography'
-import { setFiles } from '../store/filesSlice'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import AddIcon from '@mui/icons-material/Add'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { useState } from 'react'
+import { CreateDir } from './CreateDir'
+import { useDispatch, useSelector } from 'react-redux'
+import { popFromStack, setCurrentDir } from '../store/filesSlice'
+import { FileInput } from './FileInput'
+import { useForm } from 'react-hook-form'
+import { DragAndDrop } from './DragAndDrop'
 
 export const Main = () => {
 	const dispatch = useDispatch()
-	const currentDir = useSelector((state) => state.files.currentDir)
+	const dirStack = useSelector((state) => state.files.dirStack)
+	const [open, setOpen] = useState(false)
+	const handleOpen = () => setOpen(true)
+	const handleClose = () => setOpen(false)
 
-	const { isError, isFetching, data, refetch } = useGetFilesQuery(currentDir)
-
-	useEffect(() => {
-		refetch()
-		if (data) {
-			dispatch(setFiles(data))
+	const handleBack = () => {
+		if (dirStack.length > 0) {
+			const backDirId = dirStack.at(-1)
+			dispatch(setCurrentDir(backDirId))
+			dispatch(popFromStack())
 		}
-	}, [currentDir, data])
-
+	}
 	return (
-		<Container sx={{ my: 2 }}>
-			<Stack direction='row' spacing={1} mb={1}>
-				<Button startIcon={<ArrowBackIcon />}>Назад</Button>
-				<Button startIcon={<AddIcon />}>Создать папку</Button>
-			</Stack>
-			{isFetching ? (
-				<CircularProgress />
-			) : isError ? (
-				<>
-					<Typography>Ошибка</Typography>
-					<Button onClick={refetch}>Попробовать снова</Button>
-				</>
-			) : data ? (
-				<FileList />
-			) : null}
-		</Container>
+		<>
+			<DragAndDrop>
+				<Container sx={{ my: 2 }}>
+					<Stack direction='row' spacing={1} mb={1}>
+						<Button
+							startIcon={<ArrowBackIcon />}
+							onClick={handleBack}
+							disabled={dirStack.length === 0}
+						>
+							Назад
+						</Button>
+						<Button startIcon={<AddIcon />} onClick={handleOpen}>
+							Создать папку
+						</Button>
+						<FileInput />
+					</Stack>
+					<FileList />
+				</Container>
+			</DragAndDrop>
+			<CreateDir open={open} onClose={handleClose} />
+		</>
 	)
 }

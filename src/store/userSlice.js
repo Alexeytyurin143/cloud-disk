@@ -10,8 +10,9 @@ export const userSlice = createSlice({
 	initialState,
 	reducers: {
 		setUser(state, action) {
-			state.currentUser = action.payload
+			state.currentUser = action.payload.user
 			state.isAuth = true
+			localStorage.setItem('token', action.payload.token)
 		},
 		logOut(state) {
 			state.currentUser = {}
