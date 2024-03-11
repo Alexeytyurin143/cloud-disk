@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import appReducer from './appSlice'
 import userReducer from './userSlice'
 import filesReducer from './filesSlice'
+import uploadReducer from './uploadSlice'
 import { userApi } from '../api/user'
 import { filesApi } from '../api/files'
 import { setupListeners } from '@reduxjs/toolkit/query'
@@ -11,6 +12,7 @@ export const store = configureStore({
 		app: appReducer,
 		user: userReducer,
 		files: filesReducer,
+		upload: uploadReducer,
 		[filesApi.reducerPath]: filesApi.reducer,
 		[userApi.reducerPath]: userApi.reducer,
 	},

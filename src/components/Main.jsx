@@ -9,8 +9,8 @@ import { CreateDir } from './CreateDir'
 import { useDispatch, useSelector } from 'react-redux'
 import { popFromStack, setCurrentDir } from '../store/filesSlice'
 import { FileInput } from './FileInput'
-import { useForm } from 'react-hook-form'
 import { DragAndDrop } from './DragAndDrop'
+import { Uploader } from './Uploader/Uploader'
 
 export const Main = () => {
 	const dispatch = useDispatch()
@@ -47,6 +47,7 @@ export const Main = () => {
 				</Container>
 			</DragAndDrop>
 			<CreateDir open={open} onClose={handleClose} />
+			<Uploader></Uploader>
 		</>
 	)
 }

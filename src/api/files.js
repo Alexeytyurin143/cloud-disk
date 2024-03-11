@@ -1,4 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { addUploadFile, changeProgress } from '../store/uploadSlice'
+import { addFile } from '../store/filesSlice'
+import axios from 'axios'
 
 export const filesApi = createApi({
 	reducerPath: 'filesApi',
@@ -11,6 +14,7 @@ export const filesApi = createApi({
 			)
 			return headers
 		},
+		tagTypes: ['Files'],
 	}),
 	endpoints: (builder) => ({
 		getFiles: builder.query({
@@ -27,11 +31,17 @@ export const filesApi = createApi({
 				},
 			}),
 		}),
+		deleteFile: builder.mutation({
+			query: (file) => ({
+				url: `/api/files?id=${file._id}`,
+				method: 'DELETE',
+			}),
+		}),
 	}),
 })
 
-export const upload = async ({ file, dirId }) => {
-	return new Promise((resolve, reject) => {
+export function upload(file, dirId) {
+	return async (dispatch) => {
 		const xhr = new XMLHttpRequest()
 		xhr.open('POST', 'http://localhost:3000/api/files/upload')
 		xhr.setRequestHeader(
@@ -39,33 +49,100 @@ export const upload = async ({ file, dirId }) => {
 			`Bearer ${localStorage.getItem('token')}`
 		)
 
-		xhr.upload.onprogress = function (event) {
-			if (event.lengthComputable) {
-				const progress = (event.loaded / event.total) * 100
-				console.log(progress.toFixed(0))
-			}
-		}
-
-		xhr.onload = function () {
-			if (xhr.status === 200) {
-				resolve(JSON.parse(xhr.response))
-			} else {
-				reject(new Error('Ошибка загрузки ' + xhr.status))
-			}
-		}
-
-		xhr.onerror = function () {
-			reject(new Error('Загрузка не удалась'))
-		}
-
 		const formData = new FormData()
 		formData.append('file', file)
 		if (dirId) {
 			formData.append('parent', dirId)
 		}
 
+		let uploadFile = {
+			name: file.name,
+			progress: 0,
+			id: Date.now(),
+		}
+
+		dispatch(addUploadFile(uploadFile))
+
+		xhr.upload.onprogress = function (event) {
+			if (event.lengthComputable) {
+				let progress = (event.loaded / event.total) * 100
+				uploadFile = { ...uploadFile, progress: progress }
+				dispatch(changeProgress(uploadFile))
+			}
+		}
+
+		xhr.onload = function () {
+			if (xhr.status === 200) {
+				dispatch(addFile(JSON.parse(xhr.response)))
+			} else {
+				const error = JSON.parse(xhr.response)
+				alert(error.message)
+			}
+		}
+
+		xhr.onerror = function () {
+			const error = JSON.parse(xhr.response)
+			alert(error.message)
+		}
+
 		xhr.send(formData)
-	})
+	}
 }
 
-export const { useGetFilesQuery, useCreateDirMutation } = filesApi
+// export function upload(file, dirId) {
+// 	return async (dispatch) => {
+// 		try {
+// 			const formData = new FormData()
+// 			formData.append('file', file)
+// 			if (dirId) {
+// 				formData.append('parent', dirId)
+// 			}
+// 			const uploadFile = { name: file.name, progress: 0, id: Date.now() }
+// 			dispatch(addUploadFile(uploadFile))
+// 			const response = await axios.post(
+// 				`http://localhost:3000/api/files/upload`,
+// 				formData,
+// 				{
+// 					headers: {
+// 						Authorization: `Bearer ${localStorage.getItem(
+// 							'token'
+// 						)}`,
+// 					},
+// 					onUploadProgress: (progressEvent) => {
+// 						uploadFile.progress = Math.round(
+// 							(progressEvent.loaded * 100) / progressEvent.total
+// 						)
+// 						dispatch(changeProgress(uploadFile))
+// 					},
+// 				}
+// 			)
+// 			dispatch(addFile(response.data))
+// 		} catch (e) {
+// 			alert(e?.response?.data?.message)
+// 		}
+// 	}
+// }
+
+export const download = async (file) => {
+	const response = await fetch(
+		`http://localhost:3000/api/files/download?id=${file._id}`,
+		{
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('token')}`,
+			},
+		}
+	)
+	if (response.status === 200) {
+		const blob = await response.blob()
+		const downloadUrl = window.URL.createObjectURL(blob)
+		const link = document.createElement('a')
+		link.href = downloadUrl
+		link.download = file.name
+		document.body.appendChild(link)
+		link.click()
+		link.remove()
+	}
+}
+
+export const { useGetFilesQuery, useCreateDirMutation, useDeleteFileMutation } =
+	filesApi

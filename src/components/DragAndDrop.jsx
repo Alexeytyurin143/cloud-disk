@@ -25,14 +25,7 @@ export const DragAndDrop = ({ children }) => {
 
 		const files = [...e.dataTransfer.files]
 		if (files) {
-			files.forEach(async (file) => {
-				try {
-					const response = await upload({ file, currentDir })
-					dispatch(addFile(response))
-				} catch (error) {
-					console.error('Ошибка загрузки:', error)
-				}
-			})
+			files.forEach((file) => dispatch(upload(file, currentDir)))
 		}
 	}
 

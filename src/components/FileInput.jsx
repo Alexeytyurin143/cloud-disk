@@ -11,14 +11,7 @@ export const FileInput = () => {
 	const onUpload = (event) => {
 		const files = [...event.target.files]
 
-		files.forEach(async (file) => {
-			try {
-				const response = await upload({ file, currentDir })
-				dispatch(addFile(response))
-			} catch (error) {
-				console.error('Ошибка загрузки:', error)
-			}
-		})
+		files.forEach((file) => dispatch(upload(file, currentDir)))
 	}
 
 	return (
