@@ -23,7 +23,9 @@ export const UploadFile = ({ file }) => {
 				>
 					<CloseIcon />
 				</Button>
-				<Typography>{file.name}</Typography>
+				<Typography marginRight={2} maxWidth={500}>
+					{file.name}
+				</Typography>
 			</Box>
 
 			<CircularProgress variant='determinate' value={file.progress} />

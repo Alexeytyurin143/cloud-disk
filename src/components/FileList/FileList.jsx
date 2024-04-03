@@ -11,20 +11,38 @@ import Typography from '@mui/material/Typography'
 import { File } from './File'
 import { setFiles } from '../../store/filesSlice'
 import { useGetFilesQuery } from '../../api/files'
+import { Box, CircularProgress } from '@mui/material'
 
 export const FileList = () => {
 	const files = useSelector((state) => state.files.files)
 	const dispatch = useDispatch()
 	const currentDir = useSelector((state) => state.files.currentDir)
+	const sort = useSelector((state) => state.files.sort)
 
-	const { isError, data, refetch } = useGetFilesQuery(currentDir)
+	const { isFetching, isError, data, refetch } = useGetFilesQuery({
+		dirId: currentDir,
+		sort,
+	})
 
 	useEffect(() => {
 		refetch()
 		if (data) {
 			dispatch(setFiles(data))
 		}
-	}, [currentDir, data])
+	}, [currentDir, data, sort])
+
+	if (isFetching) {
+		return (
+			<Box
+				marginTop={5}
+				display='flex'
+				alignItems='center'
+				justifyContent='center'
+			>
+				<CircularProgress size={120} />
+			</Box>
+		)
+	}
 
 	return (
 		<>

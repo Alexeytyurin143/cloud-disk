@@ -4,6 +4,7 @@ const initialState = {
 	currentDir: null,
 	files: [],
 	dirStack: [],
+	sort: 'type',
 }
 
 export const fileSlice = createSlice({
@@ -30,6 +31,9 @@ export const fileSlice = createSlice({
 		popFromStack(state) {
 			state.dirStack.pop()
 		},
+		setSort(state, action) {
+			state.sort = action.payload
+		},
 	},
 })
 
@@ -40,6 +44,7 @@ export const {
 	pushToStack,
 	popFromStack,
 	deleteFileAction,
+	setSort,
 } = fileSlice.actions
 
 export default fileSlice.reducer

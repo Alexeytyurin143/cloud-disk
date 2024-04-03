@@ -7,6 +7,8 @@ import { useCreateDirMutation } from '../api/files'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFile } from '../store/filesSlice'
 import Typography from '@mui/material/Typography'
+import CloseIcon from '@mui/icons-material/Close'
+import { Stack } from '@mui/material'
 
 export const CreateDir = ({ open, onClose }) => {
 	const style = {
@@ -43,9 +45,19 @@ export const CreateDir = ({ open, onClose }) => {
 	return (
 		<Modal open={open} onClose={onClose}>
 			<Box component='form' onSubmit={handleSubmit(onSubmit)} sx={style}>
-				<Typography component='h3' variant='h5'>
-					Создание папки
-				</Typography>
+				<Stack
+					direction='row'
+					justifyContent='space-between'
+					alignItems='center'
+				>
+					<Typography component='h3' variant='h5'>
+						Создание папки
+					</Typography>
+					<Button onClick={onClose} sx={{ minWidth: 'auto' }}>
+						<CloseIcon />
+					</Button>
+				</Stack>
+
 				<TextField
 					margin='normal'
 					required

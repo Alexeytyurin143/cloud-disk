@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { addUploadFile, changeProgress } from '../store/uploadSlice'
 import { addFile } from '../store/filesSlice'
-import axios from 'axios'
 
 export const filesApi = createApi({
 	reducerPath: 'filesApi',
@@ -18,7 +17,19 @@ export const filesApi = createApi({
 	}),
 	endpoints: (builder) => ({
 		getFiles: builder.query({
-			query: (dirId) => `/api/files${dirId ? `?parent=${dirId}` : ''}`,
+			query: ({ dirId, sort }) => {
+				let url = '/api/files'
+				if (dirId) {
+					url = `/api/files?parent=${dirId}`
+				}
+				if (sort) {
+					url = `/api/files?sort=${sort}`
+				}
+				if (dirId && sort) {
+					url = `/api/files?parent=${dirId}&sort=${sort}`
+				}
+				return url
+			},
 		}),
 		createDir: builder.mutation({
 			query: ({ dirId, name }) => ({
@@ -88,40 +99,6 @@ export function upload(file, dirId) {
 		xhr.send(formData)
 	}
 }
-
-// export function upload(file, dirId) {
-// 	return async (dispatch) => {
-// 		try {
-// 			const formData = new FormData()
-// 			formData.append('file', file)
-// 			if (dirId) {
-// 				formData.append('parent', dirId)
-// 			}
-// 			const uploadFile = { name: file.name, progress: 0, id: Date.now() }
-// 			dispatch(addUploadFile(uploadFile))
-// 			const response = await axios.post(
-// 				`http://localhost:3000/api/files/upload`,
-// 				formData,
-// 				{
-// 					headers: {
-// 						Authorization: `Bearer ${localStorage.getItem(
-// 							'token'
-// 						)}`,
-// 					},
-// 					onUploadProgress: (progressEvent) => {
-// 						uploadFile.progress = Math.round(
-// 							(progressEvent.loaded * 100) / progressEvent.total
-// 						)
-// 						dispatch(changeProgress(uploadFile))
-// 					},
-// 				}
-// 			)
-// 			dispatch(addFile(response.data))
-// 		} catch (e) {
-// 			alert(e?.response?.data?.message)
-// 		}
-// 	}
-// }
 
 export const download = async (file) => {
 	const response = await fetch(

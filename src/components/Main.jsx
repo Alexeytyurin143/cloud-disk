@@ -11,6 +11,7 @@ import { popFromStack, setCurrentDir } from '../store/filesSlice'
 import { FileInput } from './FileInput'
 import { DragAndDrop } from './DragAndDrop'
 import { Uploader } from './Uploader/Uploader'
+import { Sort } from './Sort'
 
 export const Main = () => {
 	const dispatch = useDispatch()
@@ -30,7 +31,12 @@ export const Main = () => {
 		<>
 			<DragAndDrop>
 				<Container sx={{ my: 2 }}>
-					<Stack direction='row' spacing={1} mb={1}>
+					<Stack
+						direction='row'
+						alignItems='center'
+						spacing={1}
+						mb={1}
+					>
 						<Button
 							startIcon={<ArrowBackIcon />}
 							onClick={handleBack}
@@ -42,6 +48,7 @@ export const Main = () => {
 							Создать папку
 						</Button>
 						<FileInput />
+						<Sort />
 					</Stack>
 					<FileList />
 				</Container>

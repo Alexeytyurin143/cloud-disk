@@ -20,6 +20,7 @@ export const FileInput = () => {
 			variant='outlined'
 			component='label'
 			size='large'
+			sx={{ maxWidth: '100px' }}
 		>
 			Выберите или перетащите файлы для загрузки
 			<input multiple onChange={onUpload} hidden type='file' />
