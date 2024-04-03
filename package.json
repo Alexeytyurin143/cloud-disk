@@ -17,7 +17,7 @@
 		"jsxSingleQuote": true,
 		"printWidth": 80,
 		"trailingComma": "es5",
-		"prettier.endOfLine": "auto"
+		"endOfLine": "auto"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.11.1",
