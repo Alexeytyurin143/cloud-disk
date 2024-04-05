@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button'
-import AttachFileIcon from '@mui/icons-material/AttachFile'
+import AddIcon from '@mui/icons-material/Add'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFile } from '../store/filesSlice'
 import { upload } from '../api/files'
@@ -15,14 +15,8 @@ export const FileInput = () => {
 	}
 
 	return (
-		<Button
-			startIcon={<AttachFileIcon />}
-			variant='outlined'
-			component='label'
-			size='large'
-			sx={{ maxWidth: '100px' }}
-		>
-			Выберите или перетащите файлы для загрузки
+		<Button startIcon={<AddIcon />} component='label'>
+			Добавить файлы
 			<input multiple onChange={onUpload} hidden type='file' />
 		</Button>
 	)

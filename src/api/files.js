@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { addUploadFile, changeProgress } from '../store/uploadSlice'
-import { addFile } from '../store/filesSlice'
+import { addFile, setFiles } from '../store/filesSlice'
 
 export const filesApi = createApi({
 	reducerPath: 'filesApi',
@@ -51,7 +51,7 @@ export const filesApi = createApi({
 	}),
 })
 
-export function upload(file, dirId) {
+export const upload = (file, dirId) => {
 	return async (dispatch) => {
 		const xhr = new XMLHttpRequest()
 		xhr.open('POST', 'http://localhost:3000/api/files/upload')
@@ -118,6 +118,27 @@ export const download = async (file) => {
 		document.body.appendChild(link)
 		link.click()
 		link.remove()
+	}
+}
+
+export const search = async (search) => {
+	return async (dispatch) => {
+		try {
+			const response = await fetch(
+				`http://localhost:3000/api/files/search?search=${search}`,
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem(
+							'token'
+						)}`,
+					},
+				}
+			)
+			const data = await response.json()
+			dispatch(setFiles(data))
+		} catch (error) {
+			console.log(error)
+		}
 	}
 }
 
