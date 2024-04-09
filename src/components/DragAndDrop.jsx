@@ -1,7 +1,6 @@
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { useState } from 'react'
-import { addFile } from '../store/filesSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { upload } from '../api/files'
 
@@ -43,7 +42,7 @@ export const DragAndDrop = ({ children }) => {
 				alignItems: highlight && 'center',
 				minHeight: highlight
 					? 'calc(100vh - 121px)'
-					: 'calc(100vh - 81px)',
+					: 'calc(100vh - 100px)',
 			}}
 		>
 			{highlight ? (

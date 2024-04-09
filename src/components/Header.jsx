@@ -3,16 +3,20 @@ import Button from '@mui/material/Button'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import IconButton from '@mui/material/IconButton'
 import { Link, useNavigate } from 'react-router-dom'
 import { ColorToggler } from './ColorToggler'
 import { useDispatch, useSelector } from 'react-redux'
 import { logOut } from '../store/userSlice'
 import { filesApi } from '../api/files'
+import { baseUrl } from '../api/config'
 
 export const Header = () => {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const isAuth = useSelector((state) => state.user.isAuth)
+	const currentUser = useSelector((state) => state.user.currentUser)
 
 	const logOutHandler = () => {
 		dispatch(filesApi.util.resetApiState())
@@ -21,8 +25,13 @@ export const Header = () => {
 	}
 
 	return (
-		<AppBar position='static' color='default' elevation={0}>
-			<Toolbar sx={{ flexWrap: 'wrap' }}>
+		<AppBar
+			position='static'
+			color='default'
+			elevation={1}
+			sx={{ marginBottom: 4 }}
+		>
+			<Toolbar sx={{ flexWrap: 'wrap', paddingY: 1 }}>
 				<Typography
 					variant='h6'
 					color='inherit'
@@ -33,12 +42,28 @@ export const Header = () => {
 				</Typography>
 				{isAuth ? (
 					<>
-						<Link to='/profile'>Профиль</Link>
+						<Link to='/profile'>
+							<IconButton>
+								{currentUser.avatar ? (
+									<img
+										src={`${baseUrl}/${currentUser.avatar}`}
+										alt='Аватар'
+										style={{
+											width: '35px',
+											height: '35px',
+											borderRadius: '50%',
+											objectFit: 'cover',
+										}}
+									/>
+								) : (
+									<AccountCircleIcon fontSize='large' />
+								)}
+							</IconButton>
+						</Link>
 						<Button
 							variant='outlined'
 							onClick={logOutHandler}
 							sx={{
-								my: 1,
 								mx: 1.5,
 							}}
 						>
@@ -52,7 +77,6 @@ export const Header = () => {
 							to='/login'
 							variant='outlined'
 							sx={{
-								my: 1,
 								mx: 1.5,
 								display: {
 									xs: 'none',
@@ -67,7 +91,6 @@ export const Header = () => {
 							to='/registration'
 							variant='outlined'
 							sx={{
-								my: 1,
 								mx: 1.5,
 								display: {
 									xs: 'none',

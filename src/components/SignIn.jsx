@@ -17,7 +17,6 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLoginMutation } from '../api/user'
 import { setUser } from '../store/userSlice'
-import { useEffect } from 'react'
 
 export const SignIn = () => {
 	const isAuth = useSelector((state) => state.user.isAuth)

@@ -12,7 +12,7 @@ import {
 	setCurrentDir,
 } from '../../store/filesSlice'
 import { formatFileSize } from '../../utils/fileSize'
-import { Button } from '@mui/material'
+import { IconButton } from '@mui/material'
 import { download, useDeleteFileMutation } from '../../api/files'
 
 export const File = ({ file }) => {
@@ -55,33 +55,15 @@ export const File = ({ file }) => {
 
 			<TableCell align='right'>
 				{file.type !== 'dir' ? (
-					<Button
-						sx={{
-							minWidth: 'auto',
-							color: 'white',
-							':hover': {
-								color: 'primary.main',
-							},
-						}}
-						onClick={DownloadHandler}
-					>
+					<IconButton onClick={DownloadHandler}>
 						<DownloadIcon />
-					</Button>
+					</IconButton>
 				) : null}
 			</TableCell>
 			<TableCell>
-				<Button
-					sx={{
-						minWidth: 'auto',
-						color: 'white',
-						':hover': {
-							color: 'primary.main',
-						},
-					}}
-					onClick={DeleteHandler}
-				>
+				<IconButton onClick={DeleteHandler}>
 					<DeleteIcon />
-				</Button>
+				</IconButton>
 			</TableCell>
 			<TableCell>{dayjs(file.date).format('DD.MM.YYYY HH:mm')}</TableCell>
 			<TableCell>{formatFileSize(file.size)}</TableCell>

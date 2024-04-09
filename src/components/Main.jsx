@@ -4,7 +4,6 @@ import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import TextField from '@mui/material/TextField'
 import { useState } from 'react'
 import { CreateDir } from './CreateDir'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,16 +12,24 @@ import { FileInput } from './FileInput'
 import { DragAndDrop } from './DragAndDrop'
 import { Uploader } from './Uploader/Uploader'
 import { Sort } from './Sort'
-import { useDebounce } from '../hooks/useDebounce'
+import { SearchInput } from './searchInput'
+import { upload, useLazySearchFilesQuery } from '../api/files'
+import { Box, CircularProgress } from '@mui/material'
 
 export const Main = () => {
 	const dispatch = useDispatch()
 	const dirStack = useSelector((state) => state.files.dirStack)
+	const [searchFiles, { isFetching }] = useLazySearchFilesQuery()
 	const [open, setOpen] = useState(false)
-	const [search, setSearch] = useState('')
-	const searchDebounce = useDebounce(search, 500)
 	const handleOpen = () => setOpen(true)
 	const handleClose = () => setOpen(false)
+	const currentDir = useSelector((state) => state.files.currentDir)
+
+	const onUpload = (event) => {
+		const files = [...event.target.files]
+
+		files.forEach((file) => dispatch(upload(file, currentDir)))
+	}
 
 	const handleBack = () => {
 		if (dirStack.length > 0) {
@@ -34,7 +41,7 @@ export const Main = () => {
 	return (
 		<>
 			<DragAndDrop>
-				<Container sx={{ my: 2 }}>
+				<Container>
 					<Stack
 						direction='row'
 						alignItems='center'
@@ -54,20 +61,24 @@ export const Main = () => {
 						>
 							Создать папку
 						</Button>
-						<FileInput />
-						<TextField
-							variant='standard'
-							label='Поиск'
-							sx={{
-								margin: '0 auto!important',
-								minWidth: '350px',
-							}}
-							value={search}
-							onChange={(e) => setSearch(e.target.value)}
-						/>
+						<FileInput onChange={onUpload} multiple>
+							Загрузить файлы
+						</FileInput>
+						<SearchInput searchFiles={searchFiles} />
 						<Sort />
 					</Stack>
-					<FileList />
+					{isFetching && (
+						<Box
+							display='flex'
+							alignItems='center'
+							justifyContent='center'
+						>
+							<CircularProgress size={120} />
+						</Box>
+					)}
+					<Box display={isFetching && 'none'}>
+						<FileList />
+					</Box>
 				</Container>
 			</DragAndDrop>
 			<CreateDir open={open} onClose={handleClose} />

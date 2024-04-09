@@ -1,5 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close'
-import { Box, Button, CircularProgress, Typography } from '@mui/material'
+import { Box, CircularProgress, IconButton, Typography } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import { deleteUploadFile } from '../../store/uploadSlice'
 
@@ -17,12 +17,9 @@ export const UploadFile = ({ file }) => {
 			borderRadius={2}
 		>
 			<Box display='flex' alignItems='center' gap={1}>
-				<Button
-					sx={{ minWidth: 'auto', padding: 0 }}
-					onClick={() => dispatch(deleteUploadFile(file.id))}
-				>
+				<IconButton onClick={() => dispatch(deleteUploadFile(file.id))}>
 					<CloseIcon />
-				</Button>
+				</IconButton>
 				<Typography marginRight={2} maxWidth={500}>
 					{file.name}
 				</Typography>
