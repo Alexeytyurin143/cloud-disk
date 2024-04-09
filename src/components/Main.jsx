@@ -12,7 +12,7 @@ import { FileInput } from './FileInput'
 import { DragAndDrop } from './DragAndDrop'
 import { Uploader } from './Uploader/Uploader'
 import { Sort } from './Sort'
-import { SearchInput } from './searchInput'
+import { SearchInput } from './SearchInput'
 import { upload, useLazySearchFilesQuery } from '../api/files'
 import { Box, CircularProgress } from '@mui/material'
 
