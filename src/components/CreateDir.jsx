@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addFile } from '../store/filesSlice'
 import Typography from '@mui/material/Typography'
 import CloseIcon from '@mui/icons-material/Close'
-import { Stack } from '@mui/material'
+import { IconButton, Stack } from '@mui/material'
 
 export const CreateDir = ({ open, onClose }) => {
 	const style = {
@@ -53,9 +53,9 @@ export const CreateDir = ({ open, onClose }) => {
 					<Typography component='h3' variant='h5'>
 						Создание папки
 					</Typography>
-					<Button onClick={onClose} sx={{ minWidth: 'auto' }}>
+					<IconButton onClick={onClose}>
 						<CloseIcon />
-					</Button>
+					</IconButton>
 				</Stack>
 
 				<TextField

@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { addUploadFile, changeProgress } from '../store/uploadSlice'
 import { addFile } from '../store/filesSlice'
+import { baseUrl } from './config'
 
 export const filesApi = createApi({
 	reducerPath: 'filesApi',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://localhost:3000',
+		baseUrl: baseUrl,
 		prepareHeaders: (headers) => {
 			headers.set(
 				'Authorization',
@@ -13,7 +14,6 @@ export const filesApi = createApi({
 			)
 			return headers
 		},
-		tagTypes: ['Files'],
 	}),
 	endpoints: (builder) => ({
 		getFiles: builder.query({
@@ -48,13 +48,35 @@ export const filesApi = createApi({
 				method: 'DELETE',
 			}),
 		}),
+		searchFiles: builder.query({
+			query: (search) => {
+				if (search.length !== 0) {
+					return `/api/files/search?search=${search}`
+				} else {
+					return '/api/files'
+				}
+			},
+		}),
+		uploadAvatar: builder.mutation({
+			query: (data) => ({
+				url: '/api/files/avatar',
+				method: 'POST',
+				body: data,
+			}),
+		}),
+		deleteAvatar: builder.mutation({
+			query: () => ({
+				url: '/api/files/avatar',
+				method: 'DELETE',
+			}),
+		}),
 	}),
 })
 
-export function upload(file, dirId) {
+export const upload = (file, dirId) => {
 	return async (dispatch) => {
 		const xhr = new XMLHttpRequest()
-		xhr.open('POST', 'http://localhost:3000/api/files/upload')
+		xhr.open('POST', `${baseUrl}/api/files/upload`)
 		xhr.setRequestHeader(
 			'Authorization',
 			`Bearer ${localStorage.getItem('token')}`
@@ -102,7 +124,7 @@ export function upload(file, dirId) {
 
 export const download = async (file) => {
 	const response = await fetch(
-		`http://localhost:3000/api/files/download?id=${file._id}`,
+		`${baseUrl}/api/files/download?id=${file._id}`,
 		{
 			headers: {
 				Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -121,5 +143,11 @@ export const download = async (file) => {
 	}
 }
 
-export const { useGetFilesQuery, useCreateDirMutation, useDeleteFileMutation } =
-	filesApi
+export const {
+	useGetFilesQuery,
+	useCreateDirMutation,
+	useDeleteFileMutation,
+	useLazySearchFilesQuery,
+	useUploadAvatarMutation,
+	useDeleteAvatarMutation,
+} = filesApi

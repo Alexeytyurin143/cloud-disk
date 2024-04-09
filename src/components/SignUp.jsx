@@ -11,7 +11,6 @@ import { Navigate, Link as RouterLink, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useRegistrationMutation } from '../api/user'
 import { useSelector } from 'react-redux'
-import { useEffect } from 'react'
 
 export const SignUp = () => {
 	const navigate = useNavigate()

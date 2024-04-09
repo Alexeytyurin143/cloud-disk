@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, IconButton, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { UploadFile } from './UploadFile'
 import { useDispatch, useSelector } from 'react-redux'
@@ -38,15 +38,14 @@ export const Uploader = () => {
 				marginBottom={1}
 			>
 				<Typography fontSize={20}>Загрузки</Typography>
-				<Button
-					sx={{ minWidth: 'auto' }}
+				<IconButton
 					onClick={() => {
 						dispatch(hideUploader())
 						dispatch(clearFiles())
 					}}
 				>
 					<CloseIcon />
-				</Button>
+				</IconButton>
 			</Box>
 
 			{files.map((file) => (
